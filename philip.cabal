@@ -16,6 +16,8 @@ Library
   Exposed-Modules:      Philip
   Other-Modules:        Philip.Internal
   Build-Depends:        base >= 4 && < 5
+                        , mtl
+                        , Cabal
 
 Test-Suite spec
   Type:                 exitcode-stdio-1.0
@@ -24,7 +26,9 @@ Test-Suite spec
   Ghc-Options:          -Wall
   Main-Is:              Spec.hs
   Build-Depends:        base
-                      , hspec
+                        , mtl
+                        , Cabal
+                        , hspec
 
 Source-Repository head
   Type:                 git
