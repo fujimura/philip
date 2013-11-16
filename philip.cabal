@@ -17,6 +17,7 @@ Library
                         , Philip.DSL
   Build-Depends:        base >= 4 && < 5
                         , mtl
+                        , split
                         , Cabal
 
 Test-Suite spec
@@ -29,6 +30,7 @@ Test-Suite spec
   Build-Depends:        base
                         , mtl
                         , Cabal
+                        , split
                         , hspec
 
 Source-Repository head
