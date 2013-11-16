@@ -1,6 +1,6 @@
 # philip
 
-TODO: Write description here
+Write .cabal file in Haskell
 
 ## Installation
 
