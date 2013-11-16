@@ -1,3 +1,0 @@
-module Philip.Internal
-    (
-    ) where

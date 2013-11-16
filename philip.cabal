@@ -14,7 +14,7 @@ Library
   HS-Source-Dirs:       src
   GHC-Options:          -Wall
   Exposed-Modules:      Philip
-  Other-Modules:        Philip.Internal
+                        , Philip.DSL
   Build-Depends:        base >= 4 && < 5
                         , mtl
                         , Cabal
@@ -22,7 +22,8 @@ Library
 Test-Suite spec
   Type:                 exitcode-stdio-1.0
   Default-Language:     Haskell2010
-  Hs-Source-Dirs:       test
+  Hs-Source-Dirs:       src
+                      , test
   Ghc-Options:          -Wall
   Main-Is:              Spec.hs
   Build-Depends:        base
