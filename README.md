@@ -1,4 +1,5 @@
-# philip
+# philip [![Build Status](https://travis-ci.org/fujimura/philip.png?branch=master)](https://travis-ci.org/fujimura/philip)
+
 
 Write .cabal file in Haskell
 
