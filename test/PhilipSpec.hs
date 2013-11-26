@@ -3,9 +3,11 @@ import           Philip.DSL
 
 import           Control.Monad.State
 import           Data.Version                    (Version (..))
-import           Distribution.Package            (PackageIdentifier (..),
+import           Distribution.Package            (Dependency (..),
+                                                  PackageIdentifier (..),
                                                   PackageName (..))
 import qualified Distribution.PackageDescription as PD
+import qualified Distribution.Version            as V
 
 import           Test.Hspec
 
@@ -25,6 +27,7 @@ spec = do
             copyright $ "(c) 2013 " ++ me
             licenseFile "LICENSE"
             stability "stable"
+            buildDepends [("dep1", "== 1.0.0 && < 1.2.0"), ("dep2", ">= 2.0.0 && <= 2.2.0")]
             dataFiles ["g", "h"]
             dataDir "data/directory"
             extraSrcFiles ["a", "b"]
@@ -42,3 +45,12 @@ spec = do
       PD.extraDocFiles d `shouldBe` ["e", "f"]
       PD.dataFiles d `shouldBe` ["g", "h"]
       PD.dataDir d `shouldBe` "data/directory"
+      let ver1 = V.intersectVersionRanges
+                (V.thisVersion $ Version [1,0,0] [])
+                (V.earlierVersion $ Version [1,2,0] [])
+      let ver2 = V.intersectVersionRanges
+                (V.thisVersion $ Version [2,0,0] [])
+                (V.thisVersion $ Version [2,2,0] [])
+      PD.buildDepends d `shouldBe` [ Dependency (PackageName "dep1") ver1
+                                   , Dependency (PackageName "dep2") ver2
+                                   ]

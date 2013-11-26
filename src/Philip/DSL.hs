@@ -14,6 +14,7 @@ module Philip.DSL
     , synopsis
     , description
     , category
+    , buildDepends
     , dataFiles
     , dataDir
     , extraSrcFiles
@@ -24,11 +25,15 @@ module Philip.DSL
 import           Control.Monad.State
 import           Data.List.Split                 (splitOn)
 import           Data.Version                    (Version (..))
-import           Distribution.Package            (PackageIdentifier (..),
+import qualified Distribution.Compat.ReadP       as Parse
+import           Distribution.Package            (Dependency (..),
+                                                  PackageIdentifier (..),
                                                   PackageName (..))
 import           Distribution.PackageDescription (PackageDescription,
                                                   emptyPackageDescription)
 import qualified Distribution.PackageDescription as PD
+import qualified Distribution.Text               as T
+import           Distribution.Version            (VersionRange (..))
 
 desc :: State PackageDescription a -> PackageDescription
 desc = flip execState emptyPackageDescription
@@ -65,3 +70,14 @@ dataFiles xs = state $ \pd -> ((), pd { PD.dataFiles = xs })
 extraSrcFiles xs = state $ \pd -> ((), pd { PD.extraSrcFiles = xs })
 extraTmpFiles xs = state $ \pd -> ((), pd { PD.extraTmpFiles = xs })
 extraDocFiles xs = state $ \pd -> ((), pd { PD.extraDocFiles = xs })
+
+buildDepends :: [(String, String)] -> State PackageDescription()
+buildDepends deps = state $ \pd -> ((), pd { PD.buildDepends = map toDependency deps})
+  where
+    toDependency :: (String, String) -> Dependency
+    toDependency (depName,ver) = Dependency (PackageName depName) (parse ver)
+      where
+        parse :: String -> VersionRange
+        parse str = case [ p | (p, _) <- Parse.readP_to_S T.parse str ] of
+          [] -> error $ "Error: Parsing version range of " ++ depName ++ "was failed (" ++ str ++ ")"
+          xs -> last xs
