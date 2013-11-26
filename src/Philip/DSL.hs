@@ -47,6 +47,14 @@ bugReports x  = state $ \pd -> ((), pd { PD.bugReports  = x })
 synopsis x    = state $ \pd -> ((), pd { PD.synopsis    = x })
 description x = state $ \pd -> ((), pd { PD.description = x })
 category x    = state $ \pd -> ((), pd { PD.category    = x })
+version x    = state $ \pd -> ((), pd { PD.package    = update x (PD.package pd) })
+  where
+    -- TODO Update version tags
+    update v PackageIdentifier{pkgName} = PackageIdentifier pkgName $ Version (parse v) []
+    parse xs = map (\x -> read x :: Int) $ splitOn "." xs
+name x = state $ \pd -> ((), pd { PD.package = update x (PD.package pd) })
+  where
+    update x PackageIdentifier{pkgVersion} = PackageIdentifier (PackageName x) pkgVersion
 
 dataDir :: FilePath -> State PackageDescription()
 dataDir x = state $ \pd -> ((), pd { PD.dataDir = x })
@@ -57,12 +65,3 @@ dataFiles xs = state $ \pd -> ((), pd { PD.dataFiles = xs })
 extraSrcFiles xs = state $ \pd -> ((), pd { PD.extraSrcFiles = xs })
 extraTmpFiles xs = state $ \pd -> ((), pd { PD.extraTmpFiles = xs })
 extraDocFiles xs = state $ \pd -> ((), pd { PD.extraDocFiles = xs })
-
-version x    = state $ \pd -> ((), pd { PD.package    = update x (PD.package pd) })
-  where
-    -- TODO Update version tags
-    update v PackageIdentifier{pkgName} = PackageIdentifier pkgName $ Version (parse v) []
-    parse xs = map (\x -> read x :: Int) $ splitOn "." xs
-name x = state $ \pd -> ((), pd { PD.package = update x (PD.package pd) })
-  where
-    update x PackageIdentifier{pkgVersion} = PackageIdentifier (PackageName x) pkgVersion
