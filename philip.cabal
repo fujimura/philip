@@ -6,7 +6,7 @@ License:                BSD3
 License-File:           LICENSE
 -- Synopsis:               
 -- Description:            
-Cabal-Version:          >= 1.10
+Cabal-Version:          >= 1.18
 Build-Type:             Simple
 
 Library
@@ -18,7 +18,7 @@ Library
   Build-Depends:        base >= 4 && < 5
                         , mtl
                         , split
-                        , Cabal
+                        , Cabal >=1.18
 
 Test-Suite spec
   Type:                 exitcode-stdio-1.0
@@ -29,7 +29,7 @@ Test-Suite spec
   Main-Is:              Spec.hs
   Build-Depends:        base
                         , mtl
-                        , Cabal
+                        , Cabal >=1.18
                         , split
                         , hspec
 
