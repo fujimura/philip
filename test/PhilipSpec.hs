@@ -25,6 +25,8 @@ spec = do
             copyright $ "(c) 2013 " ++ me
             licenseFile "LICENSE"
             stability "stable"
+            dataFiles ["g", "h"]
+            dataDir "data/directory"
             extraSrcFiles ["a", "b"]
             extraTmpFiles ["c", "d"]
             extraDocFiles ["e", "f"]
@@ -38,3 +40,5 @@ spec = do
       PD.extraSrcFiles d `shouldBe` ["a", "b"]
       PD.extraTmpFiles d `shouldBe` ["c", "d"]
       PD.extraDocFiles d `shouldBe` ["e", "f"]
+      PD.dataFiles d `shouldBe` ["g", "h"]
+      PD.dataDir d `shouldBe` "data/directory"

@@ -14,6 +14,8 @@ module Philip.DSL
     , synopsis
     , description
     , category
+    , dataFiles
+    , dataDir
     , extraSrcFiles
     , extraTmpFiles
     , extraDocFiles
@@ -46,7 +48,12 @@ synopsis x    = state $ \pd -> ((), pd { PD.synopsis    = x })
 description x = state $ \pd -> ((), pd { PD.description = x })
 category x    = state $ \pd -> ((), pd { PD.category    = x })
 
-extraSrcFiles, extraTmpFiles, extraDocFiles :: [FilePath] -> State PackageDescription ()
+dataDir :: FilePath -> State PackageDescription()
+dataDir x = state $ \pd -> ((), pd { PD.dataDir = x })
+
+dataFiles, extraSrcFiles, extraTmpFiles, extraDocFiles
+  :: [FilePath] -> State PackageDescription ()
+dataFiles xs = state $ \pd -> ((), pd { PD.dataFiles = xs })
 extraSrcFiles xs = state $ \pd -> ((), pd { PD.extraSrcFiles = xs })
 extraTmpFiles xs = state $ \pd -> ((), pd { PD.extraTmpFiles = xs })
 extraDocFiles xs = state $ \pd -> ((), pd { PD.extraDocFiles = xs })
