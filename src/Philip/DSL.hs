@@ -14,6 +14,9 @@ module Philip.DSL
     , synopsis
     , description
     , category
+    , extraSrcFiles
+    , extraTmpFiles
+    , extraDocFiles
     ) where
 
 import           Control.Monad.State
@@ -42,6 +45,11 @@ bugReports x  = state $ \pd -> ((), pd { PD.bugReports  = x })
 synopsis x    = state $ \pd -> ((), pd { PD.synopsis    = x })
 description x = state $ \pd -> ((), pd { PD.description = x })
 category x    = state $ \pd -> ((), pd { PD.category    = x })
+
+extraSrcFiles, extraTmpFiles, extraDocFiles :: [FilePath] -> State PackageDescription ()
+extraSrcFiles xs = state $ \pd -> ((), pd { PD.extraSrcFiles = xs })
+extraTmpFiles xs = state $ \pd -> ((), pd { PD.extraTmpFiles = xs })
+extraDocFiles xs = state $ \pd -> ((), pd { PD.extraDocFiles = xs })
 
 version x    = state $ \pd -> ((), pd { PD.package    = update x (PD.package pd) })
   where

@@ -25,7 +25,9 @@ spec = do
             copyright $ "(c) 2013 " ++ me
             licenseFile "LICENSE"
             stability "stable"
-
+            extraSrcFiles ["a", "b"]
+            extraTmpFiles ["c", "d"]
+            extraDocFiles ["e", "f"]
 
       PD.author d `shouldBe` "Fujimura Daisuke"
       PD.maintainer d `shouldBe` "Fujimura Daisuke"
@@ -33,3 +35,6 @@ spec = do
       PD.package d `shouldBe` PackageIdentifier (PackageName "foo") (Version [1,2,3] [])
       PD.licenseFile d `shouldBe` "LICENSE"
       PD.stability d `shouldBe` "stable"
+      PD.extraSrcFiles d `shouldBe` ["a", "b"]
+      PD.extraTmpFiles d `shouldBe` ["c", "d"]
+      PD.extraDocFiles d `shouldBe` ["e", "f"]
