@@ -15,6 +15,7 @@ module Philip.DSL
     , description
     , category
     , buildDepends
+    , buildType
     , dataFiles
     , dataDir
     , extraSrcFiles
@@ -30,7 +31,8 @@ import           Distribution.Package            (Dependency (..),
                                                   PackageIdentifier (..),
                                                   PackageName (..))
 import           Distribution.PackageDescription (PackageDescription,
-                                                  emptyPackageDescription)
+                                                  emptyPackageDescription,
+                                                  BuildType(..))
 import qualified Distribution.PackageDescription as PD
 import qualified Distribution.Text               as T
 import           Distribution.Version            (VersionRange (..))
@@ -81,3 +83,6 @@ buildDepends deps = state $ \pd -> ((), pd { PD.buildDepends = map toDependency 
         parse str = case [ p | (p, _) <- Parse.readP_to_S T.parse str ] of
           [] -> error $ "Error: Parsing version range of " ++ depName ++ "was failed (" ++ str ++ ")"
           xs -> last xs
+
+buildType :: BuildType -> State PackageDescription ()
+buildType x = state $ \pd -> ((), pd { PD.buildType = Just x })

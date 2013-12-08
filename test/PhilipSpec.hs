@@ -6,6 +6,7 @@ import           Data.Version                    (Version (..))
 import           Distribution.Package            (Dependency (..),
                                                   PackageIdentifier (..),
                                                   PackageName (..))
+import Distribution.PackageDescription (BuildType(..))
 import qualified Distribution.PackageDescription as PD
 import qualified Distribution.Version            as V
 
@@ -27,6 +28,7 @@ spec = do
             copyright $ "(c) 2013 " ++ me
             licenseFile "LICENSE"
             stability "stable"
+            buildType Simple
             buildDepends [("dep1", "== 1.0.0 && < 1.2.0"), ("dep2", "== 2.0.0")]
             dataFiles ["g", "h"]
             dataDir "data/directory"
@@ -40,6 +42,7 @@ spec = do
       PD.package d `shouldBe` PackageIdentifier (PackageName "foo") (Version [1,2,3] [])
       PD.licenseFile d `shouldBe` "LICENSE"
       PD.stability d `shouldBe` "stable"
+      PD.buildType d `shouldBe` Just Simple
       PD.extraSrcFiles d `shouldBe` ["a", "b"]
       PD.extraTmpFiles d `shouldBe` ["c", "d"]
       PD.extraDocFiles d `shouldBe` ["e", "f"]
