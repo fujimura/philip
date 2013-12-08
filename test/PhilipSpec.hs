@@ -6,7 +6,7 @@ import           Data.Version                    (Version (..))
 import           Distribution.Package            (Dependency (..),
                                                   PackageIdentifier (..),
                                                   PackageName (..))
-import Distribution.PackageDescription (BuildType(..))
+import Distribution.PackageDescription (BuildType(..), RepoType(..), SourceRepo(..))
 import qualified Distribution.PackageDescription as PD
 import qualified Distribution.Version            as V
 
@@ -35,6 +35,8 @@ spec = do
             extraSrcFiles ["a", "b"]
             extraTmpFiles ["c", "d"]
             extraDocFiles ["e", "f"]
+            repo Git "git://git-hosting.com/philip.git"
+            repo Mercurial "https://mercurial-hosting.com/philip.git"
 
       PD.author d `shouldBe` "Fujimura Daisuke"
       PD.maintainer d `shouldBe` "Fujimura Daisuke"
@@ -55,3 +57,19 @@ spec = do
       PD.buildDepends d `shouldBe` [ Dependency (PackageName "dep1") ver1
                                    , Dependency (PackageName "dep2") ver2
                                    ]
+
+      let defaultSourceRepo = SourceRepo { repoKind     = PD.RepoHead
+                                         , repoType     = Nothing
+                                         , repoLocation = Nothing
+                                         , repoModule   = Nothing
+                                         , repoBranch   = Nothing
+                                         , repoTag      = Nothing
+                                         , repoSubdir   = Nothing
+                                         }
+      PD.sourceRepos d `shouldBe` [ defaultSourceRepo { repoType = Just Git
+                                                      , repoLocation = Just "git://git-hosting.com/philip.git"
+                                                      }
+                                  , defaultSourceRepo { repoType     = Just Mercurial
+                                                      , repoLocation = Just "https://mercurial-hosting.com/philip.git"
+                                                      }
+                                  ]

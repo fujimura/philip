@@ -21,6 +21,7 @@ module Philip.DSL
     , extraSrcFiles
     , extraTmpFiles
     , extraDocFiles
+    , repo
     ) where
 
 import           Control.Monad.State
@@ -30,9 +31,11 @@ import qualified Distribution.Compat.ReadP       as Parse
 import           Distribution.Package            (Dependency (..),
                                                   PackageIdentifier (..),
                                                   PackageName (..))
-import           Distribution.PackageDescription (PackageDescription,
-                                                  emptyPackageDescription,
-                                                  BuildType(..))
+import           Distribution.PackageDescription (BuildType (..),
+                                                  PackageDescription,
+                                                  RepoType (..),
+                                                  SourceRepo (..),
+                                                  emptyPackageDescription)
 import qualified Distribution.PackageDescription as PD
 import qualified Distribution.Text               as T
 import           Distribution.Version            (VersionRange (..))
@@ -86,3 +89,15 @@ buildDepends deps = state $ \pd -> ((), pd { PD.buildDepends = map toDependency 
 
 buildType :: BuildType -> State PackageDescription ()
 buildType x = state $ \pd -> ((), pd { PD.buildType = Just x })
+
+-- TODO: Create the way to specify all fields
+repo :: RepoType -> String -> State PackageDescription ()
+repo repoType url = state $ \pd -> ((), pd { PD.sourceRepos = (PD.sourceRepos pd) ++ [newSourceRepo] })
+  where newSourceRepo = SourceRepo { repoKind     = PD.RepoHead
+                                   , repoType     = Just repoType
+                                   , repoLocation = Just url
+                                   , repoModule   = Nothing
+                                   , repoBranch   = Nothing
+                                   , repoTag      = Nothing
+                                   , repoSubdir   = Nothing
+                                   }
