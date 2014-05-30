@@ -27,7 +27,10 @@ testDescription =
       copyright $ "(c) 2013 " ++ me
       licenseFile "LICENSE"
       stability "stable"
-      buildDepends [("dep1", "== 1.0.0 && < 1.2.0"), ("dep2", "== 2.0.0")]
+      buildDepends [ ("dep1", "== 1.0.0 && < 1.2.0")
+                   , ("dep2", "== 2.0.0")
+                   , ("dep3", "-any")
+                   ]
       dataFiles ["g", "h"]
       dataDir "data/directory"
       extraSrcFiles ["a", "b"]
@@ -57,4 +60,5 @@ spec = do
       let ver2 = V.thisVersion $ Version [2,0,0] []
       PD.buildDepends d `shouldBe` [ Dependency (PackageName "dep1") ver1
                                    , Dependency (PackageName "dep2") ver2
+                                   , Dependency (PackageName "dep3") V.AnyVersion
                                    ]
